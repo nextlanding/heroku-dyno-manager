@@ -1,6 +1,6 @@
 require "heroku-api"
 require "pg"
-require 'uri'
+require "uri"
 
 class DynoManager < Thor
   desc "scale_down API_KEY APP_NAME", "Scales down any dynos that are not in use."
@@ -25,7 +25,8 @@ class DynoManager < Thor
                             :password => db.password,
                             :dbname => db.path[1..-1])
 
-
+          res = conn.exec("SELECT COUNT(*) FROM djkombu_message WHERE visible = TRUE")
+          puts res
         ensure
           conn.close unless conn.nil?
         end
@@ -33,7 +34,7 @@ class DynoManager < Thor
 
         puts "Turning off celeryd"
       elsif proc_name.start_with? "web" and p["state"] === "idle"
-        heroku.post_ps_scale(app_name, 'web', 0)
+        heroku.post_ps_scale(app_name, "web", 0)
         puts "Turning off web"
       end
 
