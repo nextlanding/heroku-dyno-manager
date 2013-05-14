@@ -4,6 +4,7 @@ GEM
     excon (0.21.0)
     heroku-api (0.3.10)
       excon (~> 0.21.0)
+    pg (0.15.1)
     thor (0.18.1)
 
 PLATFORMS
@@ -11,4 +12,5 @@ PLATFORMS
 
 DEPENDENCIES
   heroku-api
+  pg
   thor
