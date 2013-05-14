@@ -25,14 +25,16 @@ class DynoManager < Thor
                             :password => db.password,
                             :dbname => db.path[1..-1])
 
-          res = conn.exec("SELECT COUNT(*) FROM djkombu_message WHERE visible = TRUE")
-          puts res
+          res = Integer(conn.exec("SELECT COUNT(*) FROM djkombu_message WHERE visible = TRUE")[0]["count"])
+
+          if res === 0
+            heroku.post_ps_scale(app_name, 'celeryd', 0)
+            puts "Turning off celeryd"
+          end
         ensure
           conn.close unless conn.nil?
         end
-        #heroku.post_ps_scale(app_name, 'celeryd', 0)
 
-        puts "Turning off celeryd"
       elsif proc_name.start_with? "web" and p["state"] === "idle"
         heroku.post_ps_scale(app_name, "web", 0)
         puts "Turning off web"
