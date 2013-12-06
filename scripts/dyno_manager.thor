@@ -28,8 +28,8 @@ class DynoManager < Thor
           res = Integer(conn.exec('SELECT COUNT(*) FROM djkombu_message WHERE visible = TRUE')[0]['count'])
 
           if res === 0
-            heroku.post_ps_scale(app_name, 'celeryd', 0)
-            puts 'Turning off celeryd'
+            heroku.post_ps_scale(app_name, 'worker', 0)
+            puts 'Turning off worker'
           end
         ensure
           conn.close unless conn.nil?
