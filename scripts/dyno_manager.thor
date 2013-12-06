@@ -14,7 +14,7 @@ class DynoManager < Thor
     procs.each do |p|
 
       proc_name = p['process']
-      if proc_name.start_with? 'celeryd' and Integer(p['elapsed']) >= 60 * 10 #10 minutes
+      if proc_name.start_with? 'worker' and Integer(p['elapsed']) >= 60 * 10 #10 minutes
         db_cn = heroku.get_config_vars(app_name).body['DATABASE_URL']
         begin
           db = URI.parse(db_cn)
