@@ -4,6 +4,7 @@ require 'uri'
 
 class DynoManager < Thor
   desc 'scale_down API_KEY APP_NAME', 'Scales down any dynos that are not in use.'
+  desc 'scale_up API_KEY APP_NAME', 'Scales up a web and worker dyno if none are running.'
 
   def scale_down(api_key, app_name)
 
@@ -43,4 +44,23 @@ class DynoManager < Thor
     end
 
   end
+  
+  def scale_up(api_key, app_name)
+    
+    heroku = Heroku::API.new(:api_key => api_key)
+    workers = heroku.get_ps(app_name).body.select{ |ps| ps["process"] =~ /worker/ }
+    web = heroku.get_ps(app_name).body.select{ |ps| ps["process"] =~ /web/ }
+    
+    workers_count = workers.size
+    web_count = web.size
+    
+    if workers_count == 0
+      heroku.post_ps_scale(app_name, 'worker', 1)
+    end
+    
+    if web_count == 0
+      heroku.post_ps_scae(app_name, 'web', 1)
+    end
+
+  end    
 end
