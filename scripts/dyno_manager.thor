@@ -58,7 +58,7 @@ class DynoManager < Thor
     end
     
     if web_count == 0
-      heroku.post_ps_scae(app_name, 'web', 1)
+      heroku.post_ps_scale(app_name, 'web', 1)
     end
 
   end    
