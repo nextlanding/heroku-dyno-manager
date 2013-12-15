@@ -4,8 +4,6 @@ require 'uri'
 
 class DynoManager < Thor
   desc 'scale_down API_KEY APP_NAME', 'Scales down any dynos that are not in use.'
-  desc 'scale_up API_KEY APP_NAME', 'Scales up a web and worker dyno if none are running.'
-
   def scale_down(api_key, app_name)
 
     heroku = Heroku::API.new(:api_key => api_key)
@@ -45,6 +43,7 @@ class DynoManager < Thor
 
   end
   
+  desc 'scale_up API_KEY APP_NAME', 'Scales up a web and worker dyno if none are running.'
   def scale_up(api_key, app_name)
     
     heroku = Heroku::API.new(:api_key => api_key)
